@@ -7,6 +7,8 @@ namespace MainProcessingService.Enums
         [Description(".txt")]
         Txt,
         [Description(".docx")]
-        Docx
+        Docx,
+        [Description(".pdf")]
+        Pdf,
     }
 }

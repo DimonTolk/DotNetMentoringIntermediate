@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using MainProcessingService.Interfaces;
 using MainProcessingService.Models;
 
 namespace MainProcessingService
@@ -8,6 +7,7 @@ namespace MainProcessingService
     {
         private const string GroupId = "TestGroup";
         private readonly ConsumerConfig _consumerConfig;
+        private Dictionary<string, List<byte>> _messages;
 
         public MessageBus(string host)
         {
@@ -15,8 +15,11 @@ namespace MainProcessingService
             {
                 BootstrapServers = host,
                 GroupId = GroupId,
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                AllowAutoCreateTopics = true,
             };
+
+            _messages = new Dictionary<string, List<byte>>();
         }
 
         public void SubscribeOnTopic(string topic)
@@ -41,8 +44,16 @@ namespace MainProcessingService
                         var consumerResult = consumer.Consume(tokenSource.Token);
                         if (consumerResult.Message.Value is DCSMessage result)
                         {
-                            var processor = FileProcessorResolver.ResolveProcessor(result.FileName);
-                            processor.Process(result);
+                            if(result.Position != result.Size)
+                            {
+                                _messages[result.FileName].AddRange(result.Content);
+                            }
+                            else
+                            {
+                                var processor = FileProcessorResolver.ResolveProcessor(result.FileName);
+                                var fileContent = _messages[result.FileName].ToArray();
+                                processor.Process((result.FileName, fileContent));
+                            }
                         }
                     }
                     catch (ConsumeException exception)

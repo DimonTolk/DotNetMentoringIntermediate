@@ -1,6 +1,7 @@
 ﻿using MainProcessingService.Enums;
 using MainProcessingService.Helpers;
 using MainProcessingService.Interfaces;
+using MainProcessingService.Services;
 
 namespace MainProcessingService
 {
@@ -15,6 +16,8 @@ namespace MainProcessingService
                     return new TxtProcessService();
                 case ExtensionsEnum.Docx:
                     return new DocProcessService();
+                case ExtensionsEnum.Pdf:
+                    return new PdfProcessService();
                 default:
                     throw new NotImplementedException();
             }

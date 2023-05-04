@@ -4,6 +4,6 @@ namespace MainProcessingService.Interfaces
 {
     public interface IProcessingService
     {
-        void Process(DCSMessage message);
+        void Process((string FileName, byte[] Content) message);
     }
 }

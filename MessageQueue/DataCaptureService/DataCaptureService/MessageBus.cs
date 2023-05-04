@@ -12,7 +12,8 @@ namespace DataCaptureService
         {
             _producerConfig = new ProducerConfig()
             {
-                BootstrapServers = host
+                BootstrapServers = host,
+                AllowAutoCreateTopics = true
             };
         }
 

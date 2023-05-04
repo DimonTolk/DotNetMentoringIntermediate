@@ -1,11 +1,8 @@
-﻿using MainProcessingService.Interfaces;
-using MainProcessingService.Models;
-
-namespace MainProcessingService
+﻿namespace MainProcessingService
 {
-    public class TxtProcessService : IProcessingService
+    public class FileContentProcessor
     {
-        public void Process(DCSMessage message)
+        public void ProcessFile((string FileName, byte[] Content) message)
         {
             Console.WriteLine("Message delivered");
             using var stream = new MemoryStream(message.Content);
