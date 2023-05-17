@@ -1,5 +1,6 @@
 using ExpressionTrees.Task2.ExpressionMapping.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace ExpressionTrees.Task2.ExpressionMapping.Tests
 {
@@ -28,15 +29,17 @@ namespace ExpressionTrees.Task2.ExpressionMapping.Tests
         [TestMethod]
         public void Map_WhenPropertiesNamesAreDifferent_ShouldMapAccordingToTheRules()
         {
-            var mapGenerator = new MappingGenerator();
-            var mapper = mapGenerator.Generate<Foo, Bar>();
+            var customMappings = new Dictionary<string, string>();
+            customMappings["Id"] = "DifferentId";
+            customMappings["Name"] = "DifferentName";
+            customMappings["Description"] = "DifferentDescription";
+            var mapFunction = ExpressionMapper.CreateMap<DifferentFoo, Foo> (customMappings);
 
-            var foo = new Foo() { Id = 2, Name = "Some Name", Description = "Some Description" };
-            var bar = mapper.Map(foo);
-
-            //Assert.AreEqual(foo.Id, bar.HowOldYouOnTracker);
-            //Assert.AreEqual(foo.DoYouLikeWorkOnAProject, bar.DoYouLikeWorkOnAProject);
-            //Assert.AreEqual(foo.Why, bar.Why);
+            var source = new DifferentFoo() { DifferentId = 2, DifferentName = "Some Name", DifferentDescription = "Some Description" };
+            var destination = mapFunction(source);
+            Assert.AreEqual(source.DifferentId, destination.Id);
+            Assert.AreEqual(source.DifferentName, destination.Name);
+            Assert.AreEqual(source.DifferentDescription, destination.Description);
         }
     }
 }
