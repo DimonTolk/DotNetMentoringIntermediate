@@ -27,7 +27,7 @@ namespace CatalogService.BLL.Products.Queries
 
             var productVm = new ItemPaginationVm();
             productVm.PageNumber = request.pageNumber;
-            productVm.Items = products.Take(request.pageSize);
+            productVm.Items = products.Skip(request.pageNumber * request.pageSize).Take(request.pageSize);
 
             return productVm;
         }
