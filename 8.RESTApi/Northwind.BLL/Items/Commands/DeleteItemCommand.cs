@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CatalogService.BLL.Products.Commands
+namespace CatalogService.BLL.Items.Commands
 {
     public record DeleteItemCommand(int id) : IRequest<Unit>;
 

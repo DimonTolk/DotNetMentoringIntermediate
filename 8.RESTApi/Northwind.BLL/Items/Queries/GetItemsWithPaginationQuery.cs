@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CatalogService.BLL.Products.Queries
+namespace CatalogService.BLL.Items.Queries
 {
     public record GetItemsWithPaginationQuery(int pageNumber, int pageSize, int? categoryId) : IRequest<ItemPaginationVm>;
 

@@ -22,7 +22,6 @@ namespace CatalogService.API.Controllers
         }
 
         [HttpGet]
-        [Route("categories")]
         public async Task<IEnumerable<Category>> GetCategories([FromQuery] int? count)
         {
             if (count.HasValue)
@@ -32,13 +31,13 @@ namespace CatalogService.API.Controllers
         }
 
         [HttpGet]
-        [Route("category")]
+        [Route("{id}")]
         public async Task<Category> GetCategory(int id)
         {
             return await _mediator.Send(new GetCategoryByIdQuery(id));
         }
 
-        [HttpPost("category")]
+        [HttpPost]
         public async Task<ActionResult> Create(Category category)
         {
             try
@@ -52,7 +51,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [HttpDelete("category")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -66,7 +65,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [HttpPut("category")]
+        [HttpPut]
         public async Task<ActionResult> Update(Category category)
         {
             try

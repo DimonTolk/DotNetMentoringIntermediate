@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using CatalogService.Application.Entities;
 using CatalogService.BLL.Common.Exceptions;
-using CatalogService.BLL.Products.Commands;
-using CatalogService.BLL.Products.Queries;
+using CatalogService.BLL.Items.Commands;
+using CatalogService.BLL.Items.Queries;
 using CatalogService.BLL.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace CatalogService.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ItemsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -23,8 +23,8 @@ namespace CatalogService.API.Controllers
         }
 
         [HttpGet]
-        [Route("products")]
-        public async Task<IEnumerable<Item>> GetProducts([FromQuery] int? count)
+        [Route("{count}")]
+        public async Task<IEnumerable<Item>> GetItems([FromQuery] int? count)
         {
             if (count.HasValue)
                 return await _mediator.Send(new GetItemsWithCountQuery(count.Value));
@@ -33,25 +33,24 @@ namespace CatalogService.API.Controllers
         }
 
         [HttpGet]
-        [Route("products/pagination")]
-        public async Task<ItemPaginationVm> GetProducts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int? categoryId = null)
+        public async Task<ItemPaginationVm> GetItems([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int? categoryId = null)
         {
             return await _mediator.Send(new GetItemsWithPaginationQuery(pageNumber, pageSize, categoryId));
         }
 
         [HttpGet]
-        [Route("product")]
-        public async Task<Item> GetProduct(int id)
+        [Route("{id}")]
+        public async Task<Item> GetItem(int id)
         {
             return await _mediator.Send(new GetItemByIdQuery(id));
         }
 
-        [HttpPost("product")]
-        public async Task<ActionResult> Create(Item product)
+        [HttpPost]
+        public async Task<ActionResult> Create(Item item)
         {
             try
             {
-                await _mediator.Send(new InsertItemCommand(product));
+                await _mediator.Send(new InsertItemCommand(item));
                 return Ok();
             }
             catch (Exception ex)
@@ -60,7 +59,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [HttpDelete("product")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -74,12 +73,12 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [HttpPut("product")]
-        public async Task<ActionResult> Update(Item product)
+        [HttpPut]
+        public async Task<ActionResult> Update(Item item)
         {
             try
             {
-                await _mediator.Send(new UpdateItemCommand(product));
+                await _mediator.Send(new UpdateItemCommand(item));
                 return Ok();
             }
             catch (NotFoundException ex)

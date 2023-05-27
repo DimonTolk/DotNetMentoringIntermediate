@@ -4,7 +4,7 @@ using CatalogService.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CatalogService.BLL.Products.Commands
+namespace CatalogService.BLL.Items.Commands
 {
     public record InsertItemCommand(Item product) : IRequest<Unit>;
 

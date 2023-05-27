@@ -10,6 +10,7 @@ using MediatR;
 using System;
 using Serilog;
 using CatalogService.BLL.Common;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace CatalogService.API
 {
@@ -30,7 +31,10 @@ namespace CatalogService.API
 
             string connection = Configuration["ConnectionStrings:CatalogServiceDbConnection"];
             services.AddDbContext<CatalogServiceContext>(opt => opt.UseSqlServer(connection));
-            services.AddControllers();
+            services.AddControllers(options =>
+                options.Conventions.Add(new RouteTokenTransformerConvention(
+                    new LowerCaseParameterTransformer())));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CatalogService.API", Version = "v1" });

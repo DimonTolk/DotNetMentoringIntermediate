@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CatalogService.BLL.Products.Queries
+namespace CatalogService.BLL.Items.Queries
 {
     public record GetItemsQuery() : IRequest<IEnumerable<Item>>;
 
